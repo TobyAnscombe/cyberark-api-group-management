@@ -1,5 +1,7 @@
 # cyberark_group_management
 
+[![CI](https://github.com/TobyAnscombe/cyberark-api-group-management/actions/workflows/ci.yml/badge.svg)](https://github.com/TobyAnscombe/cyberark-api-group-management/actions/workflows/ci.yml)
+
 Ansible role that ensures CyberArk Privilege Cloud vault groups exist, creating any that are absent. Intended as a **one-time bootstrap** for groups required by [`tobyanscombe.cyberark_safe_management`](https://github.com/TobyAnscombe/cyberark-api-safe-management).
 
 ## When to run
@@ -21,10 +23,12 @@ All API calls run `delegate_to: localhost` / `run_once: true`. The role is idemp
 ## Requirements
 
 - Ansible 2.9+
-- `cyberark_token` present on the play — produced by [`tobyanscombe.cyberark_auth`](https://github.com/TobyAnscombe/cyberark-api-management) or supplied by any other means
 - A CyberArk Privilege Cloud tenant
+- `cyberark_token` set on the play — produced by [`tobyanscombe.cyberark_auth`](https://github.com/TobyAnscombe/cyberark-api-management) or supplied by any other means
 
 ## Install
+
+Add both roles to your project's `requirements.yml`:
 
 ```yaml
 # requirements.yml
