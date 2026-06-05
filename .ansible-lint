@@ -1,5 +1,9 @@
 profile: basic
 
+# Prevent ansible-lint from auto-running ansible-galaxy install when it finds
+# requirements.yml. mock_roles below stubs external roles for lint purposes.
+offline: true
+
 mock_roles:
   - cyberark_auth
   - cyberark_group_management
