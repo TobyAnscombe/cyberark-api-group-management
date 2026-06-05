@@ -1,0 +1,47 @@
+---
+# Bootstrap playbook — run once when setting up a new CyberArk Privilege Cloud tenant.
+#
+# Ensures the two custom vault groups required by the cyberark_safe_management role exist.
+# The three Privilege Cloud built-in groups (Administrators, Auditors, Safe Managers) are
+# provisioned automatically by CyberArk and are not created here.
+#
+# Run:
+#   ansible-playbook examples/bootstrap.yml \
+#     -e cyberark_identity_tenant=YOUR_TENANT_ID \
+#     -e cyberark_subdomain=YOUR_SUBDOMAIN \
+#     --vault-password-file ~/.vault_pass
+#
+# requirements.yml (install before running):
+#   roles:
+#     - name: cyberark_auth
+#       src: https://github.com/TobyAnscombe/cyberark-api-management
+#       version: main
+#     - name: cyberark_group_management
+#       src: https://github.com/TobyAnscombe/cyberark-api-group-management
+#       version: main
+
+- name: Bootstrap CyberArk Privilege Cloud groups
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    cyberark_identity_tenant: "YOUR_TENANT_ID"
+    cyberark_subdomain: "YOUR_SUBDOMAIN"
+    # cyberark_client_id: !vault |
+    #   $ANSIBLE_VAULT;1.1;AES256
+    #   ...
+    # cyberark_client_secret: !vault |
+    #   $ANSIBLE_VAULT;1.1;AES256
+    #   ...
+
+    # Default groups match what cyberark_safe_management applies to every safe.
+    # Override only if you have changed the group names in that role.
+    cyberark_groups:
+      - name: "Privilege Cloud Access Approvers"
+        description: "Approvers for Privilege Cloud dual-control access requests"
+      - name: "CyberArk Break Glass Access"
+        description: "Emergency break glass access — full safe permissions, bypasses dual-control"
+
+  roles:
+    - cyberark_auth
+    - cyberark_group_management

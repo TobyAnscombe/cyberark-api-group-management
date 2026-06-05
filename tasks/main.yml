@@ -1,0 +1,18 @@
+---
+- name: Validate required group management variables
+  assert:
+    that:
+      - cyberark_token is defined
+      - cyberark_token | trim | length > 0
+      - cyberark_subdomain | trim | length > 0
+      - cyberark_groups | length > 0
+    fail_msg: "cyberark_token and cyberark_subdomain must be set and cyberark_groups must not be empty"
+  run_once: true
+  delegate_to: localhost
+
+- name: Ensure groups exist
+  include_tasks: group_present.yml
+  loop: "{{ cyberark_groups }}"
+  loop_control:
+    loop_var: cyberark_group
+    label: "{{ cyberark_group.name }}"

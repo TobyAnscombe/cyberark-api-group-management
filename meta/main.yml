@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: TobyAnscombe
+  namespace: tobyanscombe
+  role_name: cyberark_group_management
+  description: >-
+    Ensures CyberArk Privilege Cloud vault groups exist, creating any that are absent.
+    Intended as a one-time bootstrap for groups required by cyberark_safe_management.
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: EL
+      versions: ["8", "9"]
+    - name: Ubuntu
+      versions: [bionic, focal, jammy, noble]
+    - name: Debian
+      versions: [bullseye, bookworm]
+
+dependencies: []

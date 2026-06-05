@@ -1,0 +1,45 @@
+---
+- name: Search for group
+  uri:
+    url: >-
+      https://{{ cyberark_subdomain }}.privilegecloud.cyberark.cloud/passwordvault/api/UserGroups?search={{ cyberark_group.name | urlencode }}
+    method: GET
+    headers:
+      Authorization: "Bearer {{ cyberark_token }}"
+    status_code: [200]
+    timeout: 30
+    validate_certs: "{{ cyberark_validate_certs }}"
+  register: _cyberark_group_search
+  run_once: true
+  delegate_to: localhost
+
+# Search returns partial matches; filter for an exact name match.
+- name: Check if group already exists
+  set_fact:
+    _cyberark_group_exists: >-
+      {{
+        _cyberark_group_search.json.value
+        | selectattr('groupName', 'equalto', cyberark_group.name)
+        | list
+        | length > 0
+      }}
+  run_once: true
+  delegate_to: localhost
+
+- name: Create group
+  uri:
+    url: >-
+      https://{{ cyberark_subdomain }}.privilegecloud.cyberark.cloud/passwordvault/api/UserGroups
+    method: POST
+    headers:
+      Authorization: "Bearer {{ cyberark_token }}"
+    body_format: json
+    body:
+      groupName: "{{ cyberark_group.name }}"
+      description: "{{ cyberark_group.description | default('') }}"
+    status_code: [201]
+    timeout: 30
+    validate_certs: "{{ cyberark_validate_certs }}"
+  when: not _cyberark_group_exists
+  run_once: true
+  delegate_to: localhost
