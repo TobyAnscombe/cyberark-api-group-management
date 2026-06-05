@@ -12,13 +12,9 @@ The three Privilege Cloud built-in groups (`Privilege Cloud Administrators`, `Pr
 
 ## How it works
 
-For each group in `cyberark_groups`:
+For each group in `cyberark_groups`, calls `POST /Roles/StoreRole` against the CyberArk Identity API. If the role already exists the API returns `ErrorCode 1409`, which is treated as a no-op. Any other failure is fatal.
 
-1. Searches the vault for the group by name (`GET /UserGroups?search=...`)
-2. Filters results for an exact name match (the search API returns partial matches)
-3. Creates the group (`POST /UserGroups`) if no exact match is found
-
-All API calls run `delegate_to: localhost` / `run_once: true`. The role is idempotent — running it against a tenant where the groups already exist is a no-op.
+All API calls run `delegate_to: localhost` / `run_once: true`. The role is idempotent — running it against a tenant where the groups already exist reports `ok` with no changes.
 
 ## Requirements
 

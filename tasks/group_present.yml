@@ -1,34 +1,5 @@
 ---
-- name: Search for role in Identity directory
-  uri:
-    url: "https://{{ cyberark_identity_tenant }}.id.cyberark.cloud/RedRock/query"
-    method: POST
-    headers:
-      Authorization: "Bearer {{ cyberark_token }}"
-    body_format: json
-    body:
-      Script: "SELECT * FROM Role WHERE Name = '{{ cyberark_group.name }}'"
-    status_code: [200]
-    timeout: 30
-    validate_certs: "{{ cyberark_validate_certs }}"
-  register: _cyberark_role_search
-  run_once: true
-  delegate_to: localhost
-
-- name: Check if role already exists
-  set_fact:
-    _cyberark_role_exists: >-
-      {{
-        _cyberark_role_search.json.Result.Results
-        | default([])
-        | selectattr('Row.Name', 'equalto', cyberark_group.name)
-        | list
-        | length > 0
-      }}
-  run_once: true
-  delegate_to: localhost
-
-- name: Create role in Identity directory
+- name: Ensure role exists in Identity directory
   uri:
     url: "https://{{ cyberark_identity_tenant }}.id.cyberark.cloud/Roles/StoreRole"
     method: POST
@@ -41,6 +12,10 @@
     status_code: [200]
     timeout: 30
     validate_certs: "{{ cyberark_validate_certs }}"
-  when: not _cyberark_role_exists
+  register: _cyberark_store_role
   run_once: true
   delegate_to: localhost
+  failed_when:
+    - not _cyberark_store_role.json.success
+    - _cyberark_store_role.json.ErrorCode | default('') != '1409'
+  changed_when: _cyberark_store_role.json.success | bool
