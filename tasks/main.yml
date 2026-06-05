@@ -4,9 +4,9 @@
     that:
       - cyberark_token is defined
       - cyberark_token | trim | length > 0
-      - cyberark_subdomain | trim | length > 0
+      - cyberark_identity_tenant | trim | length > 0
       - cyberark_groups | length > 0
-    fail_msg: "cyberark_token and cyberark_subdomain must be set and cyberark_groups must not be empty"
+    fail_msg: "cyberark_token and cyberark_identity_tenant must be set and cyberark_groups must not be empty"
   run_once: true
   delegate_to: localhost
 

@@ -1,45 +1,46 @@
 ---
-- name: Search for group
+- name: Search for role in Identity directory
   uri:
-    url: >-
-      https://{{ cyberark_subdomain }}.privilegecloud.cyberark.cloud/passwordvault/api/UserGroups?search={{ cyberark_group.name | urlencode }}
-    method: GET
+    url: "https://{{ cyberark_identity_tenant }}.id.cyberark.cloud/Roles/GetRolesAndFilters"
+    method: POST
     headers:
       Authorization: "Bearer {{ cyberark_token }}"
+    body_format: json
+    body:
+      Script: "SELECT * FROM Role WHERE Name = '{{ cyberark_group.name }}'"
     status_code: [200]
     timeout: 30
     validate_certs: "{{ cyberark_validate_certs }}"
-  register: _cyberark_group_search
+  register: _cyberark_role_search
   run_once: true
   delegate_to: localhost
 
-# Search returns partial matches; filter for an exact name match.
-- name: Check if group already exists
+- name: Check if role already exists
   set_fact:
-    _cyberark_group_exists: >-
+    _cyberark_role_exists: >-
       {{
-        _cyberark_group_search.json.value
-        | selectattr('groupName', 'equalto', cyberark_group.name)
+        _cyberark_role_search.json.Result.Results
+        | default([])
+        | selectattr('Row.Name', 'equalto', cyberark_group.name)
         | list
         | length > 0
       }}
   run_once: true
   delegate_to: localhost
 
-- name: Create group
+- name: Create role in Identity directory
   uri:
-    url: >-
-      https://{{ cyberark_subdomain }}.privilegecloud.cyberark.cloud/passwordvault/api/UserGroups
+    url: "https://{{ cyberark_identity_tenant }}.id.cyberark.cloud/Roles/StoreRole"
     method: POST
     headers:
       Authorization: "Bearer {{ cyberark_token }}"
     body_format: json
     body:
-      groupName: "{{ cyberark_group.name }}"
-      description: "{{ cyberark_group.description | default('') }}"
-    status_code: [201]
+      Name: "{{ cyberark_group.name }}"
+      Description: "{{ cyberark_group.description | default('') }}"
+    status_code: [200]
     timeout: 30
     validate_certs: "{{ cyberark_validate_certs }}"
-  when: not _cyberark_group_exists
+  when: not _cyberark_role_exists
   run_once: true
   delegate_to: localhost
