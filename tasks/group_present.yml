@@ -1,7 +1,7 @@
 ---
 - name: Search for role in Identity directory
   uri:
-    url: "https://{{ cyberark_identity_tenant }}.id.cyberark.cloud/Roles/GetRolesAndFilters"
+    url: "https://{{ cyberark_identity_tenant }}.id.cyberark.cloud/RedRock/query"
     method: POST
     headers:
       Authorization: "Bearer {{ cyberark_token }}"
