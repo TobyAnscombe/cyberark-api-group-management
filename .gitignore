@@ -6,3 +6,4 @@
 .ansible/
 
 CLAUDE.md
+tasks/*.md
