@@ -20,7 +20,7 @@ All API calls run `delegate_to: localhost` / `run_once: true`. The role is idemp
 
 - Ansible 2.9+
 - A CyberArk Privilege Cloud tenant
-- `cyberark_token` set on the play — produced by [`tobyanscombe.cyberark_auth`](https://github.com/TobyAnscombe/cyberark-api-management) or supplied by any other means
+- `cyberark_token` set on the play — produced by [`tobyanscombe.cyberark_api_authentication`](https://github.com/TobyAnscombe/cyberark-api-management) or supplied by any other means
 - The service account associated with `cyberark_token` must have **Role Management** rights in CyberArk Identity (Admin Portal → Roles → Administrative Rights)
 
 ## Install
@@ -30,7 +30,7 @@ Add both roles to your project's `requirements.yml`:
 ```yaml
 # requirements.yml
 roles:
-  - name: cyberark_auth
+  - name: cyberark_api_authentication
     src: https://github.com/TobyAnscombe/cyberark-api-management
     version: main
   - name: cyberark_group_management
@@ -81,7 +81,7 @@ These match the names expected by `cyberark_safe_management`. If you change the 
     # cyberark_client_id and cyberark_client_secret from vault
 
   roles:
-    - cyberark_auth
+    - cyberark_api_authentication
     - cyberark_group_management
 ```
 

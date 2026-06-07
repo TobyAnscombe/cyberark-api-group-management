@@ -13,7 +13,7 @@
 #
 # requirements.yml (install before running):
 #   roles:
-#     - name: cyberark_auth
+#     - name: cyberark_api_authentication
 #       src: https://github.com/TobyAnscombe/cyberark-api-management
 #       version: main
 #     - name: cyberark_group_management
@@ -43,5 +43,5 @@
         description: "Emergency break glass access — full safe permissions, bypasses dual-control"
 
   roles:
-    - cyberark_auth
+    - cyberark_api_authentication
     - cyberark_group_management
