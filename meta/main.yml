@@ -16,4 +16,9 @@ galaxy_info:
     - name: Debian
       versions: [bullseye, bookworm]
 
-dependencies: []
+# cyberark_token must be present on the play before this role runs.
+# Supply it via cyberark_auth (listed below) or by another means.
+dependencies:
+  - src: https://github.com/TobyAnscombe/cyberark-api-management
+    name: cyberark_auth
+    version: main
