@@ -1,3 +1,4 @@
+---
 profile: basic
 
 # Prevent ansible-lint from auto-running ansible-galaxy install when it finds
