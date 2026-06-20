@@ -13,5 +13,5 @@ cyberark_validate_certs: true
 cyberark_groups:
   - name: "Privilege Cloud Access Approvers"
     description: "Approvers for Privilege Cloud dual-control access requests"
-  - name: "CyberArk Break Glass Access"
+  - name: "Privilege Cloud Break Glass Access"
     description: "Emergency break glass access — full safe permissions, bypasses dual-control"
