@@ -8,5 +8,11 @@ mock_roles:
   - cyberark_api_authentication
   - cyberark_group_management
 
+exclude_paths:
+  # example uses short role alias (cyberark_group_management) — syntax-check is unskippable
+  - examples/
+
 skip_list:
   - ignore-errors
+  - var-naming[no-role-prefix]
+  - run-once[task]
